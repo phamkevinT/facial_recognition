@@ -63,10 +63,43 @@ else:
 
         print(distances)
 
+        # get the index of member based on lowest distance
         match_index = numpy.argmin(distances)
 
         # show coincidences if any
         if distances[match_index] > 0.6:
             print("Does not match any of our employees")
         else:
-            print("Have a nice working day")
+            # search for name of matching member
+            member_name = members_names[match_index]
+
+            y1, x2, y2, x1 = location_face
+
+            # create rectangle around face
+            cv2.rectangle(image,
+                          (x1, y1),
+                          (x2, y2),
+                          (0, 255, 0),
+                          2)
+
+            # create name box
+            cv2.rectangle(image,
+                          (x1, y2 - 35),
+                          (x2, y2),
+                          (0, 255, 0),
+                          cv2.FILLED)
+
+            # add name to box
+            cv2.putText(image,
+                        member_name,
+                        (x1 + 6, y2 - 6),
+                        cv2.FONT_HERSHEY_COMPLEX,
+                        1,
+                        (255, 255, 255),
+                        2)
+
+            # show the image captured from webcam
+            cv2.imshow('Web Image', image)
+
+            # keep program running
+            cv2.waitKey(0)
