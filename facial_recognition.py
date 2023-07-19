@@ -33,8 +33,12 @@ cv2.rectangle(test_picture,
               2)
 
 # perform comparison
-result = fr.compare_faces([coded_face_A], coded_face_B)
+result = fr.compare_faces([coded_face_A], coded_face_B, 0.4)
 print(result)
+
+# measurement of distances
+distance = fr.face_distance([coded_face_A], coded_face_B)
+print(distance)
 
 # display images
 cv2.imshow('My Control Picture', control_picture)
