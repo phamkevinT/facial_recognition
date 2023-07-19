@@ -3,8 +3,8 @@ import face_recognition as fr
 
 
 # load images
-control_picture = fr.load_image_file('PictureA.jpg')
-test_picture = fr.load_image_file('PictureC.jpg')
+control_picture = fr.load_image_file('face_recognition_faces/PictureA.jpg')
+test_picture = fr.load_image_file('face_recognition_faces/PictureC.jpg')
 
 # transform images to RGB
 control_picture = cv2.cvtColor(control_picture, cv2.COLOR_BGR2RGB)
@@ -34,11 +34,18 @@ cv2.rectangle(test_picture,
 
 # perform comparison
 result = fr.compare_faces([coded_face_A], coded_face_B, 0.4)
-print(result)
 
-# measurement of distances
+# measurement of distances (tolerance when comparing pictures. lower = stricter, high = more lenient)
 distance = fr.face_distance([coded_face_A], coded_face_B)
-print(distance)
+
+# show results
+cv2.putText(test_picture,
+            f'{result} {distance.round(2)}',
+            (50, 50),
+            cv2.FONT_HERSHEY_COMPLEX,
+            1,
+            (0, 255, 0),
+            2)
 
 # display images
 cv2.imshow('My Control Picture', control_picture)
