@@ -4,7 +4,7 @@ import face_recognition as fr
 
 # load images
 control_picture = fr.load_image_file('PictureA.jpg')
-test_picture = fr.load_image_file('PictureB.jpg')
+test_picture = fr.load_image_file('PictureC.jpg')
 
 # transform images to RGB
 control_picture = cv2.cvtColor(control_picture, cv2.COLOR_BGR2RGB)
