@@ -1,4 +1,4 @@
-# Facial recognition using Python, OpenCV, Face_Recognition, Numpy
+# Facial recognition using Python, OpenCV, Face_Recognition, Numpy libraries
 
 - Create a folder containing images of members  
 - Encode each image and convert to RGB
