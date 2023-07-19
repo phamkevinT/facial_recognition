@@ -1,6 +1,7 @@
 import cv2
 import face_recognition as fr
 import os
+import numpy
 
 
 # create database
@@ -15,6 +16,7 @@ for name in members_list:
     my_images.append(this_image)
     members_names.append(os.path.splitext(name)[0])
 
+print(members_list)
 
 # encode images
 def encode(images):
@@ -43,3 +45,28 @@ encoded_member_list = encode(my_images)
 capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # read captured image
+success, image = capture.read()
+
+if not success:
+    print("Capture could not be taken")
+else:
+    # recognize face in capture
+    captured_face = fr.face_locations(image)
+
+    # encode captured face
+    encoded_captured_face = fr.face_encodings(image, captured_face)
+
+    # search for match
+    for face, location_face in zip(encoded_captured_face, captured_face):
+        matches = fr.compare_faces(encoded_member_list, face)
+        distances = fr.face_distance(encoded_member_list, face)
+
+        print(distances)
+
+        match_index = numpy.argmin(distances)
+
+        # show coincidences if any
+        if distances[match_index] > 0.6:
+            print("Does not match any of our employees")
+        else:
+            print("Have a nice working day")
