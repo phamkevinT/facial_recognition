@@ -2,6 +2,7 @@ import cv2
 import face_recognition as fr
 import os
 import numpy
+from datetime import datetime
 
 
 # create database
@@ -18,8 +19,12 @@ for name in members_list:
 
 print(members_list)
 
+
 # encode images
 def encode(images):
+    """
+    encode member images from folder
+    """
 
     # create new list
     encoded_list = []
@@ -38,19 +43,39 @@ def encode(images):
     return encoded_list
 
 
+# record attendance
+def record_attendance(person):
+    """
+    read the existing file and add existing names to list
+    if captured image contains person not in list, add their name and time to the list
+    """
+    f = open('register.csv', 'r+')
+    data_list = f.readline()
+    register_names = []
+
+    for line in data_list:
+        newcomer = line.split(',')
+        register_names.append(newcomer[0])
+
+    if person not in register_names:
+        right_now = datetime.now()
+        string_right_now = right_now.strftime('%H:%M:%S')
+        f.writelines(f'\n{person},{string_right_now}')
+
+
+# ecode images from folder containing images of members
 encoded_member_list = encode(my_images)
 
-
-# take webcam picture
+# take webcam picture (captured image)
 capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # read captured image
 success, image = capture.read()
 
 if not success:
-    print("Capture could not be taken")
+    print("Capture image could not be taken")
 else:
-    # recognize face in capture
+    # locate the face in captured image
     captured_face = fr.face_locations(image)
 
     # encode captured face
@@ -67,6 +92,7 @@ else:
         match_index = numpy.argmin(distances)
 
         # show coincidences if any
+        # adjustable distance (tolerance), default is 0.6, lower the stricter
         if distances[match_index] > 0.6:
             print("Does not match any of our employees")
         else:
@@ -97,6 +123,9 @@ else:
                         1,
                         (255, 255, 255),
                         2)
+
+            # call the record attendance function
+            record_attendance(member_name)
 
             # show the image captured from webcam
             cv2.imshow('Web Image', image)
