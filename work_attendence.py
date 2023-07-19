@@ -29,7 +29,7 @@ def encode(images):
     # create new list
     encoded_list = []
 
-    # convert images to RBG
+    # convert images to RGB
     for image in images:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
